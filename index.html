@@ -5,24 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>백선화 스케줄</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- 귀여운 폰트(전체) + 손글씨(내용) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- html2canvas for JPG export -->
   <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <div id="captureArea">
-    <div class="background-wrapper" aria-hidden="true">
+    <div class="background-wrapper">
       <img id="bgImage" src="background.png" alt="background" />
     </div>
 
     <div class="overlay">
       <header class="titlebar">
         <div class="brand">
-          <div class="mascot" title="하얀 원숭이">🐒</div>
+          <div class="mascot">🐒</div>
           <div>
             <h1>백선화 스케줄</h1>
             <p class="subtitle">Chzzk streamer 백선화</p>
@@ -32,8 +29,7 @@
 
       <section class="controls" id="controls">
         <div class="row">
-          <label>
-            요일
+          <label>요일
             <select id="daySelect">
               <option value="mon">월요일</option>
               <option value="tue">화요일</option>
@@ -45,13 +41,11 @@
             </select>
           </label>
 
-          <label>
-            시간
-            <input type="text" id="timeInput" placeholder="예: 19:00 / 7PM / 자유입력" />
+          <label>시간
+            <input type="text" id="timeInput" placeholder="예: 19:00 / 자유입력" />
           </label>
 
-          <label class="grow">
-            내용
+          <label class="grow">내용
             <input type="text" id="contentInput" class="hand" placeholder="내용 입력" />
           </label>
 
@@ -59,22 +53,15 @@
         </div>
 
         <div class="row">
-          <label class="file">
-            배경 업로드
+          <label class="file">배경 업로드
             <input type="file" id="bgUpload" accept="image/*" />
           </label>
-
           <button class="btn" type="button" onclick="saveJPG()">JPG 저장</button>
           <button class="btn danger" type="button" onclick="clearAll()">전체삭제</button>
-
-          <label class="toggle">
-            <input type="checkbox" id="hideControlsOnExport" checked />
-            저장할 때 입력창 숨기기
-          </label>
         </div>
       </section>
 
-      <main class="schedule-container" id="schedule">
+      <main class="schedule-container">
         <div class="day-box" id="mon"><h2>월요일</h2></div>
         <div class="day-box" id="tue"><h2>화요일</h2></div>
         <div class="day-box" id="wed"><h2>수요일</h2></div>
@@ -83,10 +70,6 @@
         <div class="day-box" id="sat"><h2>토요일</h2></div>
         <div class="day-box" id="sun"><h2>일요일</h2></div>
       </main>
-
-      <footer class="footer">
-        <span>© 백선화 · schedule</span>
-      </footer>
     </div>
   </div>
 
