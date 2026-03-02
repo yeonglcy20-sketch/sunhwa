@@ -1,4 +1,9 @@
-/* 백선화 스케줄 - v2 */
+/* 백선화 스케줄 - v3
+   요청 반영:
+   - 아래 금/토/일 가운데 정렬 (flex wrap + center)
+   - 내용 글씨 더 키우기 + 칸 넘어가지 않도록 자동 줄바꿈
+   - 전체 폰트 귀엽게(Jua) + 내용 손글씨(Gaegu)
+*/
 
 :root{
   --panel: rgba(255,255,255,0.74);
@@ -12,19 +17,18 @@
 
 body{
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-family: "Jua", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   color: #222;
   overflow-x: auto;
   background: #fff;
 }
 
-/* 캡처 영역: 불필요한 세로 공백 줄이기 */
 #captureArea{
   position: relative;
   width: 100%;
 }
 
-/* 배경: 화면 꽉 차게(공백 없이) */
+/* 배경: 공백 없이 꽉 */
 .background-wrapper{
   position: fixed;
   inset: 0;
@@ -46,7 +50,7 @@ body{
 }
 
 .titlebar{
-  max-width: 1280px;
+  max-width: 1320px;
   margin: 0 auto 12px;
 }
 
@@ -75,19 +79,19 @@ body{
 
 h1{
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   letter-spacing: -0.02em;
 }
 
 .subtitle{
   margin: 2px 0 0;
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.8;
 }
 
 /* 컨트롤 */
 .controls{
-  max-width: 1280px;
+  max-width: 1320px;
   margin: 0 auto 12px;
   padding: 12px 14px;
   border: 1px solid var(--stroke);
@@ -109,7 +113,7 @@ label{
   display:flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.92;
 }
 
@@ -120,21 +124,22 @@ input[type="text"], select{
   outline: none;
   min-width: 160px;
   background: #fff;
-  font-size: 15px;
+  font-size: 16px;
+  font-family: "Jua", system-ui, sans-serif;
 }
 
-/* 손글씨 폰트 */
+/* 손글씨 폰트(입력) */
 .hand{
-  font-family: "Gaegu", system-ui, sans-serif;
-  font-size: 20px !important;
+  font-family: "Gaegu", system-ui, sans-serif !important;
+  font-size: 22px !important;
   letter-spacing: 0.2px;
 }
 #contentInput{
   font-family: "Gaegu", system-ui, sans-serif;
-  font-size: 20px;
+  font-size: 22px;
 }
 
-label.grow{ flex: 1; min-width: 280px; }
+label.grow{ flex: 1; min-width: 320px; }
 
 .btn{
   padding: 10px 12px;
@@ -143,7 +148,8 @@ label.grow{ flex: 1; min-width: 280px; }
   background: #fff;
   cursor: pointer;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 15px;
+  font-family: "Jua", system-ui, sans-serif;
 }
 .btn:hover{ filter: brightness(0.98); }
 .btn.primary{ background: #ffe7f0; }
@@ -162,27 +168,22 @@ label.file input{ padding: 8px 0; }
   background: rgba(255,255,255,0.65);
 }
 
-/* 스케줄 카드: 크게 */
+/* ✅ 요일 카드: flex로 바꿔서 마지막 줄(금/토/일) 가운데로 */
 .schedule-container{
-  max-width: 1280px;
+  max-width: 1320px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 마지막 줄 가운데 */
   gap: 14px;
 }
 
-@media (max-width: 1200px){
-  .schedule-container{ grid-template-columns: repeat(3, minmax(260px, 1fr)); }
-}
-@media (max-width: 900px){
-  .schedule-container{ grid-template-columns: repeat(2, minmax(260px, 1fr)); }
-}
-@media (max-width: 640px){
-  .schedule-container{ grid-template-columns: repeat(1, minmax(280px, 1fr)); }
-}
-
+/* 카드 폭을 고정-유연하게: 줄바꿈 시 예쁘게 */
 .day-box{
-  min-height: 340px;
+  width: min(340px, 100%);
+  flex: 1 1 300px;  /* 최소 300 정도로 줄바꿈 */
+  max-width: 420px;
+  min-height: 360px;
   padding: 14px 14px 12px;
   border-radius: var(--radius);
   border: 1px solid var(--stroke);
@@ -193,11 +194,11 @@ label.file input{ padding: 8px 0; }
 .day-box h2{
   margin: 0 0 10px;
   padding-bottom: 8px;
-  font-size: 17px;
+  font-size: 18px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-/* 아이템: 세로 깨짐 방지 */
+/* 아이템 */
 .schedule-item{
   display:flex;
   gap: 10px;
@@ -212,7 +213,7 @@ label.file input{ padding: 8px 0; }
 .time{
   font-weight: 900;
   font-size: 13px;
-  padding: 4px 10px;
+  padding: 5px 10px;
   border-radius: 999px;
   background: #f3f6ff;
   border: 1px solid rgba(0,0,0,0.06);
@@ -220,14 +221,16 @@ label.file input{ padding: 8px 0; }
   flex: 0 0 auto;
 }
 
+/* ✅ 내용 글씨 키우기 + 칸 넘어가지 않게 자동 줄바꿈 */
 .text{
   flex: 1 1 auto;
   min-width: 0;
   font-family: "Gaegu", system-ui, sans-serif;
-  font-size: 20px;
-  line-height: 1.15;
+  font-size: 24px;
+  line-height: 1.18;
+  white-space: normal;
   word-break: keep-all;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere; /* 아주 긴 문자열도 칸 안에서 줄바꿈 */
 }
 
 .item-actions{
@@ -244,11 +247,12 @@ label.file input{ padding: 8px 0; }
   font-size: 12px;
   opacity: 0.9;
   white-space: nowrap;
+  font-family: "Jua", system-ui, sans-serif;
 }
 .icon-btn:hover{ opacity: 1; }
 
 .footer{
-  max-width: 1280px;
+  max-width: 1320px;
   margin: 12px auto 0;
   text-align:center;
   font-size: 12px;
