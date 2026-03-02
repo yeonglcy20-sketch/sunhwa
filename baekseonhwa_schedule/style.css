@@ -1,0 +1,242 @@
+/* 백선화 스케줄 - 카드형(월~일) + 배경 업로드 + JPG 저장 */
+:root{
+  --panel: rgba(255,255,255,0.76);
+  --card: rgba(255,255,255,0.88);
+  --stroke: rgba(0,0,0,0.10);
+  --shadow: 0 10px 24px rgba(0,0,0,0.12);
+  --radius: 18px;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  color: #222;
+  overflow-x: auto;
+  background: #fff;
+}
+
+#captureArea{
+  position: relative;
+  min-height: 100vh;
+}
+
+/* 배경: 업로드한 이미지 '원본 크기 그대로' 유지 */
+.background-wrapper{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.background-wrapper img{
+  display:block;
+  max-width: none;   /* 원본 크기 유지 */
+  height: auto;
+}
+
+/* 오버레이 */
+.overlay{
+  min-height: 100vh;
+  padding: 28px 22px 22px;
+  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.58));
+  backdrop-filter: blur(2px);
+}
+
+.titlebar{
+  max-width: 1180px;
+  margin: 0 auto 14px;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.80);
+  box-shadow: var(--shadow);
+}
+
+.mascot{
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 28px;
+  border: 1px solid var(--stroke);
+  background: #fff;
+}
+
+h1{
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle{
+  margin: 2px 0 0;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+/* 컨트롤 */
+.controls{
+  max-width: 1180px;
+  margin: 0 auto 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.86);
+  box-shadow: var(--shadow);
+}
+
+.controls .row{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-bottom: 10px;
+}
+.controls .row:last-child{ margin-bottom: 0; }
+
+label{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+input[type="text"], select{
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  outline: none;
+  min-width: 150px;
+  background: #fff;
+}
+
+label.grow{ flex: 1; min-width: 240px; }
+
+.btn{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn:hover{ filter: brightness(0.98); }
+.btn.primary{
+  background: #ffe7f0;
+}
+.btn.danger{
+  background: #ffecec;
+}
+
+label.file input{ padding: 8px 0; }
+
+.toggle{
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px dashed var(--stroke);
+  background: rgba(255,255,255,0.6);
+}
+
+/* 스케줄 카드 */
+.schedule-container{
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1200px){
+  .schedule-container{ grid-template-columns: repeat(3, minmax(200px, 1fr)); }
+}
+@media (max-width: 720px){
+  .schedule-container{ grid-template-columns: repeat(1, minmax(260px, 1fr)); }
+}
+
+.day-box{
+  min-height: 230px;
+  padding: 14px 14px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--stroke);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.day-box h2{
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  font-size: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+/* 아이템 */
+.schedule-item{
+  display:flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 8px 0 0;
+  padding: 10px 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.time{
+  font-weight: 900;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f3f6ff;
+  border: 1px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+}
+
+.text{
+  font-size: 13px;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.item-actions{
+  margin-left: auto;
+  display:flex;
+  gap: 6px;
+}
+.icon-btn{
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  border-radius: 10px;
+  padding: 4px 6px;
+  cursor:pointer;
+  font-size: 12px;
+  opacity: 0.85;
+}
+.icon-btn:hover{ opacity: 1; }
+
+.footer{
+  max-width: 1180px;
+  margin: 14px auto 0;
+  text-align:center;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+/* JPG 저장 중 깜빡임 최소화 */
+.exporting .overlay{
+  background: transparent;
+  backdrop-filter: none;
+}
