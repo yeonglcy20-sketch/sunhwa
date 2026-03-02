@@ -1,7 +1,8 @@
-/* 백선화 스케줄 - 카드형(월~일) + 배경 업로드 + JPG 저장 */
+/* 백선화 스케줄 - v2 */
+
 :root{
-  --panel: rgba(255,255,255,0.76);
-  --card: rgba(255,255,255,0.88);
+  --panel: rgba(255,255,255,0.74);
+  --card: rgba(255,255,255,0.90);
   --stroke: rgba(0,0,0,0.10);
   --shadow: 0 10px 24px rgba(0,0,0,0.12);
   --radius: 18px;
@@ -17,12 +18,13 @@ body{
   background: #fff;
 }
 
+/* 캡처 영역: 불필요한 세로 공백 줄이기 */
 #captureArea{
   position: relative;
-  min-height: 100vh;
+  width: 100%;
 }
 
-/* 배경: 업로드한 이미지 '원본 크기 그대로' 유지 */
+/* 배경: 화면 꽉 차게(공백 없이) */
 .background-wrapper{
   position: fixed;
   inset: 0;
@@ -30,32 +32,32 @@ body{
   pointer-events: none;
 }
 .background-wrapper img{
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
   display:block;
-  max-width: none;   /* 원본 크기 유지 */
-  height: auto;
 }
 
 /* 오버레이 */
 .overlay{
-  min-height: 100vh;
-  padding: 28px 22px 22px;
-  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.58));
+  padding: 18px 18px 16px;
+  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.55));
   backdrop-filter: blur(2px);
 }
 
 .titlebar{
-  max-width: 1180px;
-  margin: 0 auto 14px;
+  max-width: 1280px;
+  margin: 0 auto 12px;
 }
 
 .brand{
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
-  background: rgba(255,255,255,0.80);
+  background: rgba(255,255,255,0.82);
   box-shadow: var(--shadow);
 }
 
@@ -80,17 +82,17 @@ h1{
 .subtitle{
   margin: 2px 0 0;
   font-size: 12px;
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 /* 컨트롤 */
 .controls{
-  max-width: 1180px;
-  margin: 0 auto 16px;
-  padding: 14px 16px;
+  max-width: 1280px;
+  margin: 0 auto 12px;
+  padding: 12px 14px;
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
-  background: rgba(255,255,255,0.86);
+  background: rgba(255,255,255,0.88);
   box-shadow: var(--shadow);
 }
 
@@ -108,7 +110,7 @@ label{
   flex-direction: column;
   gap: 6px;
   font-size: 12px;
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
 input[type="text"], select{
@@ -116,11 +118,23 @@ input[type="text"], select{
   border-radius: 12px;
   border: 1px solid var(--stroke);
   outline: none;
-  min-width: 150px;
+  min-width: 160px;
   background: #fff;
+  font-size: 15px;
 }
 
-label.grow{ flex: 1; min-width: 240px; }
+/* 손글씨 폰트 */
+.hand{
+  font-family: "Gaegu", system-ui, sans-serif;
+  font-size: 20px !important;
+  letter-spacing: 0.2px;
+}
+#contentInput{
+  font-family: "Gaegu", system-ui, sans-serif;
+  font-size: 20px;
+}
+
+label.grow{ flex: 1; min-width: 280px; }
 
 .btn{
   padding: 10px 12px;
@@ -128,15 +142,12 @@ label.grow{ flex: 1; min-width: 240px; }
   border: 1px solid var(--stroke);
   background: #fff;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 14px;
 }
 .btn:hover{ filter: brightness(0.98); }
-.btn.primary{
-  background: #ffe7f0;
-}
-.btn.danger{
-  background: #ffecec;
-}
+.btn.primary{ background: #ffe7f0; }
+.btn.danger{ background: #ffecec; }
 
 label.file input{ padding: 8px 0; }
 
@@ -148,27 +159,30 @@ label.file input{ padding: 8px 0; }
   padding: 8px 10px;
   border-radius: 12px;
   border: 1px dashed var(--stroke);
-  background: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.65);
 }
 
-/* 스케줄 카드 */
+/* 스케줄 카드: 크게 */
 .schedule-container{
-  max-width: 1180px;
+  max-width: 1280px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(7, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(260px, 1fr));
+  gap: 14px;
 }
 
 @media (max-width: 1200px){
-  .schedule-container{ grid-template-columns: repeat(3, minmax(200px, 1fr)); }
+  .schedule-container{ grid-template-columns: repeat(3, minmax(260px, 1fr)); }
 }
-@media (max-width: 720px){
-  .schedule-container{ grid-template-columns: repeat(1, minmax(260px, 1fr)); }
+@media (max-width: 900px){
+  .schedule-container{ grid-template-columns: repeat(2, minmax(260px, 1fr)); }
+}
+@media (max-width: 640px){
+  .schedule-container{ grid-template-columns: repeat(1, minmax(280px, 1fr)); }
 }
 
 .day-box{
-  min-height: 230px;
+  min-height: 340px;
   padding: 14px 14px 12px;
   border-radius: var(--radius);
   border: 1px solid var(--stroke);
@@ -179,40 +193,45 @@ label.file input{ padding: 8px 0; }
 .day-box h2{
   margin: 0 0 10px;
   padding-bottom: 8px;
-  font-size: 16px;
+  font-size: 17px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-/* 아이템 */
+/* 아이템: 세로 깨짐 방지 */
 .schedule-item{
   display:flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   padding: 10px 10px;
   border-radius: 14px;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.96);
   border: 1px solid rgba(0,0,0,0.06);
 }
 
 .time{
   font-weight: 900;
-  font-size: 12px;
-  padding: 2px 8px;
+  font-size: 13px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: #f3f6ff;
   border: 1px solid rgba(0,0,0,0.06);
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .text{
-  font-size: 13px;
-  line-height: 1.2;
-  word-break: break-word;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: "Gaegu", system-ui, sans-serif;
+  font-size: 20px;
+  line-height: 1.15;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .item-actions{
-  margin-left: auto;
+  flex: 0 0 auto;
   display:flex;
   gap: 6px;
 }
@@ -220,22 +239,22 @@ label.file input{ padding: 8px 0; }
   border: 1px solid rgba(0,0,0,0.08);
   background: #fff;
   border-radius: 10px;
-  padding: 4px 6px;
+  padding: 6px 8px;
   cursor:pointer;
   font-size: 12px;
-  opacity: 0.85;
+  opacity: 0.9;
+  white-space: nowrap;
 }
 .icon-btn:hover{ opacity: 1; }
 
 .footer{
-  max-width: 1180px;
-  margin: 14px auto 0;
+  max-width: 1280px;
+  margin: 12px auto 0;
   text-align:center;
   font-size: 12px;
   opacity: 0.65;
 }
 
-/* JPG 저장 중 깜빡임 최소화 */
 .exporting .overlay{
   background: transparent;
   backdrop-filter: none;
