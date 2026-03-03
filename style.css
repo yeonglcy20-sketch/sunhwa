@@ -268,3 +268,25 @@ label.grow{ flex:1; min-width:360px; }
   background: transparent;
   backdrop-filter:none;
 }
+
+
+/* v8: content box fills empty space; content centered */
+.content-zone{
+  align-items: stretch;              /* cards can expand to full width */
+}
+
+.content-card{
+  flex: 1 1 auto;                    /* fill remaining vertical space */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;           /* center overall content vertically */
+}
+
+/* center the actual text block */
+.content-label{
+  text-align: center;
+}
+.content-text{
+  text-align: center;
+}
