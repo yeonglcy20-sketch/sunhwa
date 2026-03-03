@@ -20,9 +20,7 @@ function addSchedule() {
 
   const textSpan = document.createElement("div");
   textSpan.className = "text";
-  textSpan.innerHTML = `<span class="item-label">시간</span><span class="item-value">${time ? time : "-"}</span>`
-    + `<span class="item-gap"></span>`
-    + `<span class="item-label">내용</span><span class="item-value">${escapeHtml(content)}</span>`;
+  textSpan.innerHTML = `<div class="si-time"><span class="item-label">시간</span><span class="item-value time-value">${time ? time : "-"}</span></div><div class="si-content"><span class="item-label">내용</span><span class="item-value content-value">${escapeHtml(content)}</span></div>`;
 
   const actions = document.createElement("div");
   actions.className = "item-actions";

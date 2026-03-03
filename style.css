@@ -347,3 +347,56 @@ h1{
   overflow-y: auto;
   padding-top: 4px;
 }
+
+
+/* v4 tweaks: center day boxes, time top + content center, item transparency */
+.schedule-row{
+  justify-content: center !important;
+  align-items: stretch;
+}
+
+/* ensure rows don't stick to left even if wrapping */
+.schedule-container{
+  align-items: center;
+}
+
+/* schedule item layout */
+.schedule-item{
+  background: rgba(255, 255, 255, 0.70) !important; /* slightly transparent */
+  backdrop-filter: blur(2px);
+}
+
+/* previous .text turned into container; make it full height and column */
+.text{
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* time line pinned to top */
+.si-time{
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+/* content block centered vertically in remaining space */
+.si-content{
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  flex: 1 1 auto;
+  justify-content: center; /* center content within item box */
+}
+
+/* values sizing (keep big) */
+.time-value{ font-size: 24px; }
+.content-value{ font-size: 30px; }
+
+/* labels a bit smaller */
+.item-label{
+  font-size: 14px;
+  opacity: 0.65;
+  white-space: nowrap;
+}
