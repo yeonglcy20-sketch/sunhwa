@@ -1,402 +1,267 @@
-/* 백선화 스케줄 - v3
-   요청 반영:
-   - 아래 금/토/일 가운데 정렬 (flex wrap + center)
-   - 내용 글씨 더 키우기 + 칸 넘어가지 않도록 자동 줄바꿈
-   - 전체 폰트 귀엽게(Jua) + 내용 손글씨(Gaegu)
-*/
-
+/* v6: 강제 적용(가운데 정렬/시간 위 내용 가운데/아이템 투명) */
 :root{
-  --panel: rgba(255,255,255,0.58);
-  --card: rgba(255,255,255,0.62);
+  --panel: rgba(255,255,255,0.40);
+  --card: rgba(255,255,255,0.58);        /* 요일 박스 투명 */
+  --item: rgba(255,248,252,0.72);        /* 추가한 내용 박스 투명 */
   --stroke: rgba(0,0,0,0.10);
   --shadow: 0 10px 24px rgba(0,0,0,0.12);
   --radius: 18px;
 }
 
-*{ box-sizing: border-box; }
+*{ box-sizing:border-box; }
 
 body{
-  margin: 0;
-  font-family: "Jua", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  color: #222;
-  overflow-x: auto;
-  background: #fff;
+  margin:0;
+  font-family:"Jua", system-ui, sans-serif;
+  color:#222;
+  overflow-x:auto;
+  background:#fff;
 }
 
-#captureArea{
-  position: relative;
-  width: 100%;
-}
-
-/* 배경: 공백 없이 꽉 */
 .background-wrapper{
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
 }
 .background-wrapper img{
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
+  width:100vw;
+  height:100vh;
+  object-fit:cover;
   display:block;
 }
 
-/* 오버레이 */
 .overlay{
-  padding: 18px 18px 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.20));
+  min-height:100vh;
+  padding:18px 18px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.14));
   backdrop-filter: blur(2px);
 }
 
-.titlebar{
-  max-width: 1320px;
-  margin: 0 auto 12px;
-}
+.titlebar{ max-width:1320px; margin:0 auto 12px; }
 
 .brand{
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 14px;
-  border: 1px solid var(--stroke);
-  border-radius: var(--radius);
-  background: rgba(255,255,255,0.82);
-  box-shadow: var(--shadow);
+  display:flex;
+  gap:14px;
+  align-items:center;
+  justify-content:center;     /* ✅ 제목 영역 가운데 */
+  text-align:center;
+  padding:12px 14px;
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+  background: rgba(255,255,255,0.70);
+  box-shadow:var(--shadow);
 }
 
 .mascot{
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 28px;
-  border: 1px solid var(--stroke);
-  background: #fff;
+  width:56px; height:56px;
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--stroke);
+  background:#fff;
+  font-size:28px;
+  flex:0 0 auto;
 }
+#mascotEmoji{ outline:none; }
 
-h1{margin: 0; font-size: 34px;
-  letter-spacing: -0.02em;
+.titles h1{
+  margin:0;
+  font-size:36px;             /* ✅ 더 크게 */
+  text-align:center;
 }
-
 .subtitle{
-  margin: 2px 0 0;
-  font-size: 13px;
-  opacity: 0.8;
+  margin:4px 0 0;
+  opacity:0.78;
+  font-size:14px;
 }
 
-/* 컨트롤 */
 .controls{
-  max-width: 1320px;
-  margin: 0 auto 12px;
-  padding: 12px 14px;
-  border: 1px solid var(--stroke);
-  border-radius: var(--radius);
-  background: rgba(255,255,255,0.88);
-  box-shadow: var(--shadow);
+  max-width:1320px;
+  margin:0 auto 12px;
+  padding:12px 14px;
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+  background: rgba(255,255,255,0.78);
+  box-shadow:var(--shadow);
 }
-
 .controls .row{
   display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: end;
-  margin-bottom: 10px;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:end;
+  margin-bottom:10px;
 }
-.controls .row:last-child{ margin-bottom: 0; }
-
-label{
-  display:flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  opacity: 0.92;
-}
+.controls .row:last-child{ margin-bottom:0; }
+label{ display:flex; flex-direction:column; gap:6px; font-size:13px; opacity:0.92; }
 
 input[type="text"], select{
-  padding: 10px 10px;
-  border-radius: 12px;
-  border: 1px solid var(--stroke);
-  outline: none;
-  min-width: 160px;
-  background: #fff;
-  font-size: 16px;
-  font-family: "Jua", system-ui, sans-serif;
+  padding:10px 10px;
+  border-radius:12px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  font-size:16px;
+  font-family:"Jua", system-ui, sans-serif;
+  min-width:160px;
 }
-
-/* 손글씨 폰트(입력) */
-.hand{
-  font-family: "Gaegu", system-ui, sans-serif !important;
-  font-size: 22px !important;
-  letter-spacing: 0.2px;
-}
-#contentInput{
-  font-family: "Gaegu", system-ui, sans-serif;
-  font-size: 22px;
-}
-
-label.grow{ flex: 1; min-width: 320px; }
+label.grow{ flex:1; min-width:320px; }
+.hand{ font-family:"Gaegu", system-ui, sans-serif !important; font-size:22px !important; }
 
 .btn{
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--stroke);
-  background: #fff;
-  cursor: pointer;
-  font-weight: 800;
-  font-size: 15px;
-  font-family: "Jua", system-ui, sans-serif;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  cursor:pointer;
+  font-family:"Jua", system-ui, sans-serif;
+  font-size:15px;
+  font-weight:800;
 }
-.btn:hover{ filter: brightness(0.98); }
-.btn.primary{ background: #ffe7f0; }
-.btn.danger{ background: #ffecec; }
-
-label.file input{ padding: 8px 0; }
+.btn.primary{ background:#ffe4f0; }
+.btn.danger{ background:#ffecec; }
 
 .toggle{
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px dashed var(--stroke);
-  background: rgba(255,255,255,0.65);
+  margin-left:auto;
+  flex-direction:row;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px dashed var(--stroke);
+  background: rgba(255,255,255,0.55);
 }
 
-/* ✅ 요일 카드: flex로 바꿔서 마지막 줄(금/토/일) 가운데로 */
+/* ✅ 월화수목 / 금토일 2줄 고정 + 가운데 정렬 */
 .schedule-container{
-  max-width: 1320px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* 마지막 줄 가운데 */
-  gap: 14px;
-}
-
-/* 카드 폭을 고정-유연하게: 줄바꿈 시 예쁘게 */
-.day-box{
-  flex: 0 0 360px;      /* 모든 요일 박스 동일 크기 */
-  width: 360px;
-  max-width: 360px;
-  min-height: 360px;
-  padding: 14px 14px 12px;
-  border-radius: var(--radius);
-  border: 1px solid var(--stroke);
-  background: var(--card);
-  box-shadow: var(--shadow);
-}
-
-.day-box h2{
-  margin: 0 0 10px;
-  padding-bottom: 8px;
-  font-size: 18px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-/* 아이템 */
-.schedule-item{
+  max-width:1320px;
+  margin:0 auto;
   display:flex;
-  gap: 10px;
-  align-items: flex-start;
-  margin: 10px 0 0;
-  padding: 10px 10px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.96);
-  border: 1px solid rgba(0,0,0,0.06);
+  flex-direction:column;
+  gap:14px;
+  align-items:center;         /* ✅ 전체를 가운데 */
 }
-
-.time{
-  font-weight: 900;
-  font-size: 13px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: #f3f6ff;
-  border: 1px solid rgba(0,0,0,0.06);
-  white-space: nowrap;
-  flex: 0 0 auto;
-}
-
-/* ✅ 내용 글씨 키우기 + 칸 넘어가지 않게 자동 줄바꿈 */
-.text{
-  flex: 1 1 auto;
-  min-width: 0;
-  font-family: "Gaegu", system-ui, sans-serif;
-  font-size: 30px;
-  line-height: 1.18;
-  white-space: normal;
-  word-break: keep-all;
-  overflow-wrap: anywhere; /* 아주 긴 문자열도 칸 안에서 줄바꿈 */
-}
-
-.item-actions{
-  flex: 0 0 auto;
-  display:flex;
-  gap: 6px;
-}
-.icon-btn{
-  border: 1px solid rgba(0,0,0,0.08);
-  background: #fff;
-  border-radius: 10px;
-  padding: 6px 8px;
-  cursor:pointer;
-  font-size: 12px;
-  opacity: 0.9;
-  white-space: nowrap;
-  font-family: "Jua", system-ui, sans-serif;
-}
-.icon-btn:hover{ opacity: 1; }
-
-.footer{
-  max-width: 1320px;
-  margin: 12px auto 0;
-  text-align:center;
-  font-size: 12px;
-  opacity: 0.65;
-}
-
-.exporting .overlay{
-  background: transparent;
-  backdrop-filter: none;
-}
-
-
-/* v3 linebreak fix: schedule item content as 2 lines (시간/내용) */
-.text{
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 10px;
-  row-gap: 6px;
-  align-items: start;
-}
-
-.item-label{
-  font-family: "Jua", system-ui, sans-serif;
-  font-size: 14px;
-  opacity: 0.65;
-  white-space: nowrap;
-  padding-top: 2px;
-}
-
-.item-value{
-font-family: "Gaegu", system-ui, sans-serif;
-  font-size: 30px;
-  line-height: 1.18;
-  white-space: normal;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-}
-
-/* 작은 간격용(HTML에서 빈 span) */
-.item-gap{
-  display:none;
-}
-
-
-/* v3.1 layout tweaks */
-.brand{
-  justify-content: center;
-  text-align: center;
-}
-.brand > div:last-child{
-  text-align: center;
-}
-h1{
-  text-align: center;
-}
-
-/* Two-row schedule layout */
-.schedule-container{
-  max-width: 1320px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
 .schedule-row{
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: nowrap;
+  display:flex;
+  gap:14px;
+  justify-content:center;     /* ✅ 왼쪽 붙지 않게 */
+  width:100%;
 }
-
-.row1 .day-box{ flex: 0 0 360px; }
-.row2 .day-box{ flex: 0 0 360px; }
-
 @media (max-width: 1550px){
-  .schedule-row{ flex-wrap: wrap; }
+  .schedule-row{ flex-wrap:wrap; }
 }
 
-/* Center added items vertically in each day box */
+/* ✅ 모든 요일 박스 동일 크기 */
 .day-box{
-  display: flex;
-  flex-direction: column;
+  flex:0 0 360px;
+  width:360px;
+  max-width:360px;
+  min-height:360px;
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+  background: var(--card);
+  box-shadow:var(--shadow);
+  padding:14px 14px 12px;
+
+  display:flex;
+  flex-direction:column;
 }
 .day-box h2{
-  flex: 0 0 auto;
+  margin:0 0 10px;
+  padding-bottom:8px;
+  font-size:18px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
 }
+
+/* ✅ 추가한 내용은 '칸의 중간'에 */
 .day-box .items{
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* center vertically */
-  gap: 12px;
-  overflow-y: auto;
-  padding-top: 4px;
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;     /* 가운데 */
+  gap:12px;
+  padding-top:4px;
 }
 
-
-/* v4 tweaks: center day boxes, time top + content center, item transparency */
-.schedule-row{
-  justify-content: center !important;
-  align-items: stretch;
-}
-
-/* ensure rows don't stick to left even if wrapping */
-.schedule-container{
-  align-items: center;
-}
-
-/* schedule item layout */
+/* 스케줄 아이템 박스 */
 .schedule-item{
-  background: rgba(255, 255, 255, 0.70) !important; /* slightly transparent */
+  display:flex;
+  gap:10px;
+  align-items:stretch;
+  padding:12px 12px;
+  border-radius:14px;
+  background: var(--item);    /* ✅ 투명 */
+  border:1px solid rgba(0,0,0,0.06);
   backdrop-filter: blur(2px);
 }
 
-/* previous .text turned into container; make it full height and column */
 .text{
-  display: flex !important;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-/* time line pinned to top */
+/* ✅ 시간은 위쪽, 내용은 가운데 */
 .si-time{
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
+  display:flex;
+  gap:10px;
+  align-items:baseline;
 }
-
-/* content block centered vertically in remaining space */
 .si-content{
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  flex: 1 1 auto;
-  justify-content: center; /* center content within item box */
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  justify-content:center;     /* 가운데 유지 */
+  flex:1 1 auto;
 }
 
-/* values sizing (keep big) */
-.time-value{ font-size: 24px; }
-.content-value{ font-size: 30px; }
-
-/* labels a bit smaller */
+/* 라벨/값 */
 .item-label{
-  font-size: 14px;
-  opacity: 0.65;
-  white-space: nowrap;
+  font-family:"Jua", system-ui, sans-serif;
+  font-size:14px;
+  opacity:0.68;
+  white-space:nowrap;
+  padding-top:2px;
+}
+.item-value{
+  font-family:"Gaegu", system-ui, sans-serif;
+  font-size:30px;             /* ✅ 더 크게 */
+  line-height:1.18;
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+.time-value{ font-size:24px; }
+.content-value{ font-size:32px; }
+
+.item-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+}
+.icon-btn{
+  border:1px solid rgba(0,0,0,0.08);
+  background:#fff;
+  border-radius:10px;
+  padding:6px 8px;
+  cursor:pointer;
+  font-size:12px;
+  opacity:0.9;
+  white-space:nowrap;
+  font-family:"Jua", system-ui, sans-serif;
+}
+
+.footer{
+  max-width:1320px;
+  margin:12px auto 0;
+  text-align:center;
+  font-size:12px;
+  opacity:0.65;
+}
+
+/* export */
+.exporting .overlay{
+  background: transparent;
+  backdrop-filter:none;
 }
