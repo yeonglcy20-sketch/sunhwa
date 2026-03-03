@@ -9,9 +9,13 @@ function addSchedule(){
 
   const item = document.createElement("div");
   item.className = "schedule-item";
+
   item.innerHTML = `
-    <div><span class="label">시간</span> ${time || "-"}</div>
-    <div><span class="label">내용</span> ${content}</div>
+    <span class="item-label">시간</span>
+    ${time || "-"}
+    <br><br>
+    <span class="item-label">내용</span>
+    ${content}
   `;
 
   box.appendChild(item);

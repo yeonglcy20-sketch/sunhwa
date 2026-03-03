@@ -20,17 +20,6 @@ body{
   background:rgba(255,255,255,0.7);
 }
 
-.titlebar{
-  max-width:1300px;
-  margin:auto;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
 .schedule-container{
   display:flex;
   flex-wrap:wrap;
@@ -50,20 +39,21 @@ body{
 }
 
 .schedule-item{
-  margin-top:12px;
-  padding:12px;
+  margin-top:15px;
+  padding:15px;
   border-radius:15px;
   background:#fff8fc;
   font-family:"Gaegu", sans-serif;
   font-size:24px;
-  line-height:1.2;
+  line-height:1.3;
   white-space:normal;
   overflow-wrap:anywhere;
 }
 
-.label{
+.item-label{
   font-size:16px;
   opacity:0.7;
+  display:block;
 }
 
 .hand{
@@ -78,6 +68,5 @@ body{
   background:white;
   cursor:pointer;
 }
-
 .btn.primary{background:#ffe4f0;}
 .btn.danger{background:#ffecec;}
