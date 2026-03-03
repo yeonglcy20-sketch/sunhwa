@@ -290,3 +290,36 @@ label.grow{ flex:1; min-width:360px; }
 .content-text{
   text-align: center;
 }
+
+
+/* v9: bigger time/content text, move '내용' label to top-left, bigger day title */
+.day-box h2{
+  font-size: 28px !important;
+}
+
+.time-text{
+  font-size: 32px !important;
+}
+
+.content-text{
+  font-size: 42px !important;
+}
+
+.content-card{
+  position: relative; /* for absolute label */
+}
+
+.content-label{
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  margin: 0 !important;
+  text-align: left !important;
+  font-size: 16px !important;
+  opacity: 0.75;
+}
+
+/* keep centered content while label is in corner */
+.content-text{
+  padding-top: 18px; /* make space for corner label */
+}
