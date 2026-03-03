@@ -22,7 +22,7 @@
     <div class="overlay">
       <header class="titlebar">
         <div class="brand">
-          <div class="mascot" title="하얀 원숭이">🐒</div>
+          <div class="mascot" title="아이콘을 클릭해서 바꿀 수 있어요"><span id="mascotEmoji" contenteditable="true">🐒</span></div>
           <div>
             <h1>이번주 백선화 방송 일정</h1>
             <p class="subtitle">Chzzk streamer 백선화</p>
@@ -75,14 +75,18 @@
       </section>
 
       <main class="schedule-container" id="schedule">
-        <div class="day-box" id="mon"><h2>월요일</h2></div>
-        <div class="day-box" id="tue"><h2>화요일</h2></div>
-        <div class="day-box" id="wed"><h2>수요일</h2></div>
-        <div class="day-box" id="thu"><h2>목요일</h2></div>
-        <div class="day-box" id="fri"><h2>금요일</h2></div>
-        <div class="day-box" id="sat"><h2>토요일</h2></div>
-        <div class="day-box" id="sun"><h2>일요일</h2></div>
-      </main>
+  <div class="schedule-row row1">
+    <div class="day-box" id="mon"><h2>월요일</h2><div class="items"></div></div>
+    <div class="day-box" id="tue"><h2>화요일</h2><div class="items"></div></div>
+    <div class="day-box" id="wed"><h2>수요일</h2><div class="items"></div></div>
+    <div class="day-box" id="thu"><h2>목요일</h2><div class="items"></div></div>
+  </div>
+  <div class="schedule-row row2">
+    <div class="day-box" id="fri"><h2>금요일</h2><div class="items"></div></div>
+    <div class="day-box" id="sat"><h2>토요일</h2><div class="items"></div></div>
+    <div class="day-box" id="sun"><h2>일요일</h2><div class="items"></div></div>
+  </div>
+</main>
 
       <footer class="footer">
         <span>© 백선화 · schedule</span>

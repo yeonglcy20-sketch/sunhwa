@@ -36,7 +36,7 @@ function addSchedule() {
   actions.appendChild(delBtn);  item.appendChild(textSpan);
   item.appendChild(actions);
 
-  dayBox.appendChild(item);
+  dayBox.querySelector(".items").appendChild(item);
 
   document.getElementById("timeInput").value = "";
   document.getElementById("contentInput").value = "";

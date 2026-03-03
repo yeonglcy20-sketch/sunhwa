@@ -293,3 +293,57 @@ font-family: "Gaegu", system-ui, sans-serif;
 .item-gap{
   display:none;
 }
+
+
+/* v3.1 layout tweaks */
+.brand{
+  justify-content: center;
+  text-align: center;
+}
+.brand > div:last-child{
+  text-align: center;
+}
+h1{
+  text-align: center;
+}
+
+/* Two-row schedule layout */
+.schedule-container{
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.schedule-row{
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.row1 .day-box{ flex: 0 0 360px; }
+.row2 .day-box{ flex: 0 0 360px; }
+
+@media (max-width: 1550px){
+  .schedule-row{ flex-wrap: wrap; }
+}
+
+/* Center added items vertically in each day box */
+.day-box{
+  display: flex;
+  flex-direction: column;
+}
+.day-box h2{
+  flex: 0 0 auto;
+}
+.day-box .items{
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* center vertically */
+  gap: 12px;
+  overflow-y: auto;
+  padding-top: 4px;
+}
