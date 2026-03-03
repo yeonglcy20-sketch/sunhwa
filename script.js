@@ -7,6 +7,10 @@ function escapeHtml(str){
     .replaceAll("'","&#39;");
 }
 
+function uid(){
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
 function addSchedule(){
   const day = document.getElementById("daySelect").value;
   const time = (document.getElementById("timeInput").value || "").trim();
@@ -14,36 +18,36 @@ function addSchedule(){
   if(!content) return;
 
   const dayBox = document.getElementById(day);
-  const items = dayBox.querySelector(".items");
+  const timeZone = dayBox.querySelector(".time-zone");
+  const contentZone = dayBox.querySelector(".content-zone");
+  const id = uid();
 
-  const item = document.createElement("div");
-  item.className = "schedule-item";
-
-  const text = document.createElement("div");
-  text.className = "text";
-  text.innerHTML = `
-    <div class="si-time">
-      <span class="item-label">시간</span>
-      <span class="item-value time-value">${time ? escapeHtml(time) : "-"}</span>
-    </div>
-    <div class="si-content">
-      <span class="item-label">내용</span>
-      <span class="item-value content-value">${escapeHtml(content)}</span>
-    </div>
+  // 시간: 요일 박스 상단
+  const timeEl = document.createElement("div");
+  timeEl.className = "time-pill";
+  timeEl.dataset.id = id;
+  timeEl.innerHTML = `
+    <span class="time-label">시간</span>
+    <span class="time-text">${time ? escapeHtml(time) : "-"}</span>
   `;
 
-  const actions = document.createElement("div");
-  actions.className = "item-actions";
-  const delBtn = document.createElement("button");
-  delBtn.className = "icon-btn";
-  delBtn.type = "button";
-  delBtn.textContent = "삭제";
-  delBtn.onclick = () => item.remove();
-  actions.appendChild(delBtn);
+  // 내용: 요일 박스 중간
+  const contentEl = document.createElement("div");
+  contentEl.className = "content-card";
+  contentEl.dataset.id = id;
+  contentEl.innerHTML = `
+    <div class="content-label">내용</div>
+    <div class="content-text">${escapeHtml(content)}</div>
+    <button class="del-btn" type="button">삭제</button>
+  `;
 
-  item.appendChild(text);
-  item.appendChild(actions);
-  items.appendChild(item);
+  contentEl.querySelector(".del-btn").onclick = () => {
+    // 같은 id의 시간/내용 둘 다 삭제
+    dayBox.querySelectorAll(`[data-id="${id}"]`).forEach(el => el.remove());
+  };
+
+  timeZone.appendChild(timeEl);
+  contentZone.appendChild(contentEl);
 
   document.getElementById("timeInput").value = "";
   document.getElementById("contentInput").value = "";
@@ -58,7 +62,7 @@ document.getElementById("bgUpload").addEventListener("change", function (event) 
 });
 
 function clearAll(){
-  document.querySelectorAll(".schedule-item").forEach(el => el.remove());
+  document.querySelectorAll(".time-pill,[data-id].content-card").forEach(el => el.remove());
 }
 
 async function saveJPG(){
