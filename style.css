@@ -323,3 +323,11 @@ label.grow{ flex:1; min-width:360px; }
 .content-text{
   padding-top: 18px; /* make space for corner label */
 }
+
+
+/* v10: content text bigger and bold */
+.content-text{
+  font-size: 52px !important;   /* 더 크게 */
+  font-weight: 900 !important;  /* 두껍게 */
+  letter-spacing: -0.5px;
+}
