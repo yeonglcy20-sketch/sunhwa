@@ -1,72 +1,297 @@
+/* 백선화 스케줄 - v3
+   요청 반영:
+   - 아래 금/토/일 가운데 정렬 (flex wrap + center)
+   - 내용 글씨 더 키우기 + 칸 넘어가지 않도록 자동 줄바꿈
+   - 전체 폰트 귀엽게(Jua) + 내용 손글씨(Gaegu)
+*/
+
+:root{
+  --panel: rgba(255,255,255,0.74);
+  --card: rgba(255,255,255,0.90);
+  --stroke: rgba(0,0,0,0.10);
+  --shadow: 0 10px 24px rgba(0,0,0,0.12);
+  --radius: 18px;
+}
+
+*{ box-sizing: border-box; }
 
 body{
-  margin:0;
-  font-family:"Jua", sans-serif;
+  margin: 0;
+  font-family: "Jua", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  color: #222;
+  overflow-x: auto;
+  background: #fff;
 }
 
+#captureArea{
+  position: relative;
+  width: 100%;
+}
+
+/* 배경: 공백 없이 꽉 */
 .background-wrapper{
-  position:fixed;
-  inset:0;
-  z-index:-1;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 .background-wrapper img{
-  width:100vw;
-  height:100vh;
-  object-fit:cover;
-}
-
-.overlay{
-  padding:20px;
-  background:rgba(255,255,255,0.7);
-}
-
-.schedule-container{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:15px;
-  max-width:1300px;
-  margin:20px auto;
-}
-
-.day-box{
-  flex:1 1 300px;
-  max-width:400px;
-  min-height:360px;
-  background:white;
-  border-radius:20px;
-  padding:15px;
-}
-
-.schedule-item{
-  margin-top:15px;
-  padding:15px;
-  border-radius:15px;
-  background:#fff8fc;
-  font-family:"Gaegu", sans-serif;
-  font-size:24px;
-  line-height:1.3;
-  white-space:normal;
-  overflow-wrap:anywhere;
-}
-
-.item-label{
-  font-size:16px;
-  opacity:0.7;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
   display:block;
 }
 
-.hand{
-  font-family:"Gaegu", sans-serif;
-  font-size:22px;
+/* 오버레이 */
+.overlay{
+  padding: 18px 18px 16px;
+  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.55));
+  backdrop-filter: blur(2px);
 }
 
-.btn{
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  background:white;
-  cursor:pointer;
+.titlebar{
+  max-width: 1320px;
+  margin: 0 auto 12px;
 }
-.btn.primary{background:#ffe4f0;}
-.btn.danger{background:#ffecec;}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.82);
+  box-shadow: var(--shadow);
+}
+
+.mascot{
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 28px;
+  border: 1px solid var(--stroke);
+  background: #fff;
+}
+
+h1{
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle{
+  margin: 2px 0 0;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* 컨트롤 */
+.controls{
+  max-width: 1320px;
+  margin: 0 auto 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.88);
+  box-shadow: var(--shadow);
+}
+
+.controls .row{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-bottom: 10px;
+}
+.controls .row:last-child{ margin-bottom: 0; }
+
+label{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  opacity: 0.92;
+}
+
+input[type="text"], select{
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  outline: none;
+  min-width: 160px;
+  background: #fff;
+  font-size: 16px;
+  font-family: "Jua", system-ui, sans-serif;
+}
+
+/* 손글씨 폰트(입력) */
+.hand{
+  font-family: "Gaegu", system-ui, sans-serif !important;
+  font-size: 22px !important;
+  letter-spacing: 0.2px;
+}
+#contentInput{
+  font-family: "Gaegu", system-ui, sans-serif;
+  font-size: 22px;
+}
+
+label.grow{ flex: 1; min-width: 320px; }
+
+.btn{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 15px;
+  font-family: "Jua", system-ui, sans-serif;
+}
+.btn:hover{ filter: brightness(0.98); }
+.btn.primary{ background: #ffe7f0; }
+.btn.danger{ background: #ffecec; }
+
+label.file input{ padding: 8px 0; }
+
+.toggle{
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px dashed var(--stroke);
+  background: rgba(255,255,255,0.65);
+}
+
+/* ✅ 요일 카드: flex로 바꿔서 마지막 줄(금/토/일) 가운데로 */
+.schedule-container{
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 마지막 줄 가운데 */
+  gap: 14px;
+}
+
+/* 카드 폭을 고정-유연하게: 줄바꿈 시 예쁘게 */
+.day-box{
+  width: min(340px, 100%);
+  flex: 1 1 300px;  /* 최소 300 정도로 줄바꿈 */
+  max-width: 420px;
+  min-height: 360px;
+  padding: 14px 14px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--stroke);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.day-box h2{
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  font-size: 18px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+/* 아이템 */
+.schedule-item{
+  display:flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 10px 0 0;
+  padding: 10px 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.time{
+  font-weight: 900;
+  font-size: 13px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #f3f6ff;
+  border: 1px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* ✅ 내용 글씨 키우기 + 칸 넘어가지 않게 자동 줄바꿈 */
+.text{
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: "Gaegu", system-ui, sans-serif;
+  font-size: 24px;
+  line-height: 1.18;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere; /* 아주 긴 문자열도 칸 안에서 줄바꿈 */
+}
+
+.item-actions{
+  flex: 0 0 auto;
+  display:flex;
+  gap: 6px;
+}
+.icon-btn{
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 8px;
+  cursor:pointer;
+  font-size: 12px;
+  opacity: 0.9;
+  white-space: nowrap;
+  font-family: "Jua", system-ui, sans-serif;
+}
+.icon-btn:hover{ opacity: 1; }
+
+.footer{
+  max-width: 1320px;
+  margin: 12px auto 0;
+  text-align:center;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.exporting .overlay{
+  background: transparent;
+  backdrop-filter: none;
+}
+
+
+/* v3 linebreak fix: schedule item content as 2 lines (시간/내용) */
+.text{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 6px;
+  align-items: start;
+}
+
+.item-label{
+  font-family: "Jua", system-ui, sans-serif;
+  font-size: 14px;
+  opacity: 0.65;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+.item-value{
+  font-family: "Gaegu", system-ui, sans-serif;
+  font-size: 24px;
+  line-height: 1.18;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 작은 간격용(HTML에서 빈 span) */
+.item-gap{
+  display:none;
+}
